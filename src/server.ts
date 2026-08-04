@@ -1,12 +1,10 @@
-import app from './app.js'
-import env from '../src/config/env.js'
-
+import { app } from "./app.js"
 import dotenv from 'dotenv'
-
 dotenv.config()
 
-const PORT = env.PORT
 
-app.listen(PORT, () => {
-  console.log('server is running on port 5000')
+const port = process.env.PORT || 5000
+
+app.listen(port,()=>{
+    console.log("Sever is running!")
 })
