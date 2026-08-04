@@ -1,17 +1,26 @@
-import { Router } from "express";
-import { authRoutes } from "../modules/auth/auth.route.js";
+import { Router, type NextFunction } from 'express'
+import { authRouter } from '../modules/auth/auth.route.js'
 
 const router: Router = Router()
 
-const moduleRouter = [
-    {
-        path : 'auth',
-        router: authRoutes
-    },
+const moduleRoutes = [
+  {
+    path: '/auth',
+
+    middleware: [
+      (req: Request, res: Response, next: NextFunction) => {
+        console.log('api hit successfully1')
+        next()
+      },
+    ],
+
+    router: authRouter,
+  },
+  
 ]
 
-moduleRouter.forEach((module)=>{
-    router.use(module.path, module.router)
+moduleRoutes.forEach((module) => {
+  router.use(module.path, module.router)
 })
 
 export default router
