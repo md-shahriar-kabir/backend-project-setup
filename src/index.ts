@@ -3,6 +3,7 @@ import express from "express";
 import cors from 'cors'
 import dotenv from 'dotenv'
 import cookieParser from "cookie-parser";
+import { email, success } from "zod";
 
 const app : Application = express()
 
@@ -17,12 +18,43 @@ app.get('/', (req:Request, res:Response)=>{
 
     res.send({
         success: true,
-        message:"app is running "
+        message:'app is running'
     })
 })
+
+//----------------------------Business Logic---------//
+
+app.post('/login', async(req:Request, res:Response)=>{
+
+    // controller
+
+    const {email, password} = req.body
+
+    // service
+
+    const user = {
+        email: "shahriar@gmail.com",
+        password: 123456
+    }
+    if(!user) throw new Error('user not found')
+        if(user.email !== email || user.password !== password) 
+            throw new Error ('Invalid email and password')
+
+
+
+    // controller
+
+    res.send({
+        success : true,
+        message: 'Login Successfully'
+    })
+
+})
+
+
 
 const port = process.env.PORT || 5000
 
 app.listen(port,()=>{
-    console.log("Sever is running")
+    console.log("Sever is running!")
 })
