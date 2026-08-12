@@ -1,21 +1,23 @@
 import { app } from "./app.js"
 import dotenv from 'dotenv'
 import http, {type Server} from 'http'
+import { prisma } from "./lib/prisma.js"
 
 dotenv.config()
 
-
 const port = process.env.PORT || 5000
 
-let server: Server
-
 const bootstrap = async() =>{
+    let server: Server
     try{
-        const httpServer = http.createServer()
+
+        await prisma.$connect();
+        console.log("Database connected successfully")
+        
+        const httpServer = http.createServer(app)
         server = httpServer.listen(port, ()=>{
         console.log("http Sever is running")
     })
-
     // gracefully Shutdown
     process.on('SIGTERM', ()=>{
         server.close(()=>{
@@ -31,7 +33,7 @@ const bootstrap = async() =>{
     })
     process.on('uncaughtException', (error)=>{
         server.close(()=>{
-            console.log('uncaughtException gracefully shutdown')
+            console.log('uncaughtException gracefully shutdown', error)
             process.exit(1)
         })
     })
@@ -48,7 +50,4 @@ const bootstrap = async() =>{
     }
 }
 
-
-app.listen(port,()=>{
-    console.log("Sever is running!")
-})
+bootstrap();

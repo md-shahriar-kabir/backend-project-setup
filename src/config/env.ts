@@ -9,6 +9,7 @@ const envVariables = validateEnv()
 const env = {
   PORT: envVariables.PORT,
   nodeEnv: envVariables.NODE_ENV,
+  dataBaseUrl: envVariables.DATABASE_URL,
 }
 
 export default env
